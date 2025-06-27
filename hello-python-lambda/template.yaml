@@ -1,0 +1,24 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  HelloFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: app.lambda_handler
+      Runtime: python3.12
+      CodeUri: .
+      Events:
+        # 1) Your explicit /hello GET route
+        HelloApi:
+          Type: Api
+          Properties:
+            Path: /hello
+            Method: get
+
+        # 2) A catch-all proxy so no request ever falls through
+        ProxyApi:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: any
